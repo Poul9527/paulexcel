@@ -136,7 +136,7 @@ public class DealSBExcelServiceImpl implements ReadService {
                         }
                     }
                     String modifyColumnValue = "";
-                    for (int j = 1; j < lastRowCount; j++) {
+                    for (int j = 1; j <= lastRowCount; j++) {
                         Row row = sheet.getRow(j);
                         String matchColValue0 = getCellVal(row.getCell(matchColumnNo0));
                         if (matchColumnValue1.equals(matchColValue0)) {
