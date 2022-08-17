@@ -124,7 +124,7 @@ public class DealSBExcelService2Impl implements ReadService {
                             // 获取对应表头所在列号
                             Cell firstRowCell = firstRow.getCell(i1);
                             String i1CellVal = getCellVal(firstRowCell);
-                            int i1Index = firstRowCell.getColumnIndex();
+                            int i1Index = i1;
                             if (StringUtils.isNotBlank(matchColumnName0) && matchColumnName0.equals(i1CellVal)) {
                                 matchColumnNo0 = i1Index;
                             } else if (StringUtils.isNotBlank(matchColumnName1) && matchColumnName1.equals(i1CellVal)) {
