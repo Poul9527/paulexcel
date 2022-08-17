@@ -3,9 +3,7 @@ package com.paul.paulexcel.poi.service.impl;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
-import com.paul.paulexcel.poi.bean.SBBean1;
 import com.paul.paulexcel.poi.bean.SBBean2;
-import com.paul.paulexcel.poi.service.ReadService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -18,9 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author poul9527
@@ -31,23 +27,23 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class DealSBExcelService2Impl implements ReadService {
+public class DealSBExcelService2Impl{
     // 匹配总excel路径
-    public static final String bigfilePath = "D:\\bigexcels\\bigexcel.xlsx";
+    public static final String bigfilePath = "D:\\bigexcels\\HX紧固件.xlsx";
     // 要修改文件夹路径
     public static final String folderPath = "D:\\excels";
     // 用来匹配列名
-    public static final String matchColumnName0 = "图号0";
-    public static final String matchColumnName1 = "图号1";
-    public static final String matchColumnName2 = "图号2";
-    public static final String matchColumnName3 = "图号3";
-    public static final String matchColumnName4 = "图号4";
+    public static final String matchColumnName0 = "代号";
+    public static final String matchColumnName1 = "名称";
+    public static final String matchColumnName2 = "材料";
+    public static final String matchColumnName3 = "";
+    public static final String matchColumnName4 = "";
     // 修改列名
-    public static final String modifyColumnName0 = "修改0";
-    public static final String modifyColumnName1 = "修改1";
-    public static final String modifyColumnName2 = "修改2";
-    public static final String modifyColumnName3 = "修改3";
-    public static final String modifyColumnName4 = "修改4";
+    public static final String modifyColumnName0 = "MDM编号";
+    public static final String modifyColumnName1 = "";
+    public static final String modifyColumnName2 = "";
+    public static final String modifyColumnName3 = "";
+    public static final String modifyColumnName4 = "";
 
     public static void main(String[] args) throws IOException {
         new DealSBExcelService2Impl().readMultiExcel();
