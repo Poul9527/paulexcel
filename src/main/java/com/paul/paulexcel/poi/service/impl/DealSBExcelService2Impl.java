@@ -176,7 +176,6 @@ public class DealSBExcelService2Impl {
                                 String matchColValue0 = getCellVal(row.getCell(matchColumnNo0));
                                 String bigMatchColValue0 = sbBean2.getMatchColumnName0();
                                 if (matchColValue0.equals(bigMatchColValue0)) {
-                                    log.info(sbBean2.getMatchColumnName0() + sbBean2.getMatchColumnName1() + sbBean2.getMatchColumnName2());
                                     isMatchValue = true;
                                 } else {
                                     isMatchValue = false;
