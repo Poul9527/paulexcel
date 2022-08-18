@@ -27,9 +27,9 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class DealSBExcelService2Impl{
+public class DealSBExcelService2Impl {
     // 匹配总excel路径
-    public static final String bigfilePath = "D:\\bigexcels\\HX紧固件.xlsx";
+    public static final String bigfilePath = "D:\\bigexcels\\jgj.xlsx";
     // 要修改文件夹路径
     public static final String folderPath = "D:\\excels";
     // 用来匹配列名
@@ -171,15 +171,16 @@ public class DealSBExcelService2Impl{
                         boolean isMatchValue = false;
                         SBBean2 sbBean = new SBBean2();
                         for (SBBean2 sbBean2 : bigBean) {
-
+                            isMatchValue = false;
                             if (matchColumnNo0 != -1) {
                                 String matchColValue0 = getCellVal(row.getCell(matchColumnNo0));
                                 String bigMatchColValue0 = sbBean2.getMatchColumnName0();
                                 if (matchColValue0.equals(bigMatchColValue0)) {
+                                    log.info(sbBean2.getMatchColumnName0() + sbBean2.getMatchColumnName1() + sbBean2.getMatchColumnName2());
                                     isMatchValue = true;
                                 } else {
                                     isMatchValue = false;
-                                    break;
+                                    continue;
                                 }
                             }
                             if (matchColumnNo1 != -1) {
@@ -189,7 +190,7 @@ public class DealSBExcelService2Impl{
                                     isMatchValue = true;
                                 } else {
                                     isMatchValue = false;
-                                    break;
+                                    continue;
                                 }
                             }
                             if (matchColumnNo2 != -1) {
@@ -199,7 +200,7 @@ public class DealSBExcelService2Impl{
                                     isMatchValue = true;
                                 } else {
                                     isMatchValue = false;
-                                    break;
+                                    continue;
                                 }
                             }
                             if (matchColumnNo3 != -1) {
@@ -209,7 +210,7 @@ public class DealSBExcelService2Impl{
                                     isMatchValue = true;
                                 } else {
                                     isMatchValue = false;
-                                    break;
+                                    continue;
                                 }
                             }
                             if (matchColumnNo4 != -1) {
@@ -219,7 +220,7 @@ public class DealSBExcelService2Impl{
                                     isMatchValue = true;
                                 } else {
                                     isMatchValue = false;
-                                    break;
+                                    continue;
                                 }
                             }
                             if (isMatchValue) {
@@ -299,7 +300,7 @@ public class DealSBExcelService2Impl{
                                     }
                                 }
                             }
-                        }else {
+                        } else {
                             log.debug("{}行{}数据没匹配到", filePath + "\\" + sheet.getSheetName(), j + 1);
                         }
 
