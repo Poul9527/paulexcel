@@ -37,30 +37,44 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
     public static final String folderPath = "D:\\excels";
 
     // 修改列名
-    public static final String modifyColumnName0 = "修改0";
-    public static final String modifyColumnName1 = "修改1";
-    public static final String modifyColumnName2 = "修改2";
-    public static final String modifyColumnName3 = "修改3";
-    public static final String modifyColumnName4 = "修改4";
+    public static final String modifyColumnName0 = "MDM编号";
+    public static final String modifyColumnName1 = "";
+    public static final String modifyColumnName2 = "";
+    public static final String modifyColumnName3 = "";
+    public static final String modifyColumnName4 = "";
 
     public static void main(String[] args) throws IOException {
         new DealSBExcelNoValueServiceImpl().wirtenotmatchexcel();
     }
 
+    public static void filesDirs(File file, List<String> filesPath) {
+        if (file != null) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                for (File flies2 : files) {
+                    filesDirs(flies2, filesPath);
+                }
+            } else if (file.isFile()) {
+                String absolutePath = file.getAbsolutePath();
+                if (absolutePath.endsWith(".xls") || absolutePath.endsWith(".xlsx")) {
+                    filesPath.add(absolutePath);
+                }
+            }
+        } else {
+            System.out.println("文件不存在");
+        }
+    }
+
     public void wirtenotmatchexcel() throws IOException {
+        int noteNo = -1;
+
         System.out.println("--------------------读取文件夹，批量解析Excel文件-----------------------");
         File folder = new File(folderPath);
         Map<String, Row> notMatchRowMap = new LinkedHashMap<>();
 
         List<String> filesPath = new ArrayList();
         if (folder.exists()) {
-            File[] files = folder.listFiles();
-            for (File file2 : files) {
-                String absolutePath = file2.getAbsolutePath();
-                if (file2.isFile() && (absolutePath.endsWith(".xls") || absolutePath.endsWith(".xlsx"))) {
-                    filesPath.add(absolutePath);
-                }
-            }
+            filesDirs(folder, filesPath);
         } else {
             log.info("文件夹不存在");
             return;
@@ -72,7 +86,6 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
 
             Workbook workbook = null;
             FileInputStream fileInputStream = null;
-            FileOutputStream out = null;
             try {
                 File excelFile = new File(filePath);
                 fileInputStream = new FileInputStream(excelFile);
@@ -96,6 +109,10 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
                     int cellCount = firstRow.getLastCellNum();
                     int lastRowCount = sheet.getLastRowNum();
 
+                    if(cellCount > noteNo){
+                        noteNo = cellCount;
+                    }
+
                     //要修改填入的列号
                     int modifyColumnNo0 = -1;
                     int modifyColumnNo1 = -1;
@@ -111,6 +128,9 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
                             // 获取对应表头所在列号
                             Cell firstRowCell = firstRow.getCell(i1);
                             String i1CellVal = getCellVal(firstRowCell);
+                            if (StringUtils.isBlank(i1CellVal)) {
+                                continue;
+                            }
                             int i1Index = firstRowCell.getColumnIndex();
                             if (StringUtils.isNotBlank(modifyColumnName0) && modifyColumnName0.equals(i1CellVal)) {
                                 modifyColumnNo0 = i1Index;
@@ -157,9 +177,9 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
                                 continue;
                             }
                         }
-                        if (StringUtils.isNotBlank(modifyColumnName0) && modifyColumnNo0 != -1) {
-                            String modifyColumnValue0 = getCellVal(row.getCell(modifyColumnNo0));
-                            if (StringUtils.isBlank(modifyColumnValue0)) {
+                        if (StringUtils.isNotBlank(modifyColumnName4) && modifyColumnNo0 != -1) {
+                            String modifyColumnValue4 = getCellVal(row.getCell(modifyColumnNo4));
+                            if (StringUtils.isBlank(modifyColumnValue4)) {
                                 notMatchRowMap.put(filePath + "\\" + sheet.getSheetName() + "\\" + String.valueOf(j + 1), row);
                                 continue;
                             }
@@ -168,14 +188,10 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
 
                 }
 
-                out.close();
                 workbook.close();
                 fileInputStream.close();
             } finally {
                 try {
-                    if (null != out) {
-                        out.close();
-                    }
                     if (null != workbook) {
                         workbook.close();
                     }
@@ -204,7 +220,7 @@ public class DealSBExcelNoValueServiceImpl implements ReadService {
             for (Map.Entry<String, Row> entry : notMatchRowMap.entrySet()) {
                 String note = entry.getKey();
                 Row row = entry.getValue();
-                row.createCell(row.getLastCellNum() + 1, CellType.STRING).setCellValue(note);
+                row.createCell(noteNo, CellType.STRING).setCellValue(note);
                 Row newRow = notMatchSh.createRow(number);
                 for (int j = 0; j < row.getLastCellNum(); j++) {
                     newRow.createCell(j, CellType.STRING).setCellValue(getCellVal(row.getCell(j)));

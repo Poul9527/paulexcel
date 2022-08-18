@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,7 +47,26 @@ public class DealSBExcelService2Impl {
     public static final String modifyColumnName4 = "";
 
     public static void main(String[] args) throws IOException {
+        log.info("总文件：" + bigfilePath);
         new DealSBExcelService2Impl().readMultiExcel();
+    }
+
+    public static void filesDirs(File file, List<String> filesPath) {
+        if (file != null) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                for (File flies2 : files) {
+                    filesDirs(flies2, filesPath);
+                }
+            } else if (file.isFile()) {
+                String absolutePath = file.getAbsolutePath();
+                if (absolutePath.endsWith(".xls") || absolutePath.endsWith(".xlsx")) {
+                    filesPath.add(absolutePath);
+                }
+            }
+        } else {
+            System.out.println("文件不存在");
+        }
     }
 
     public void readMultiExcel() throws IOException {
@@ -56,18 +76,12 @@ public class DealSBExcelService2Impl {
 
         List<String> filesPath = new ArrayList();
         if (folder.exists()) {
-            File[] files = folder.listFiles();
-            for (File file2 : files) {
-                String absolutePath = file2.getAbsolutePath();
-                if (file2.isFile() && (absolutePath.endsWith(".xls") || absolutePath.endsWith(".xlsx"))) {
-                    filesPath.add(absolutePath);
-                }
-            }
+            filesDirs(folder, filesPath);
         } else {
             log.info("文件夹不存在");
             return;
         }
-        log.info(String.format("共有excel{%s}个", filesPath.size()));
+        log.info(String.format("共有excel{%s}个"+ Arrays.asList(filesPath), filesPath.size()));
 
         // 遍历文件
         for (String filePath : filesPath) {
@@ -143,26 +157,32 @@ public class DealSBExcelService2Impl {
                                 modifyColumnNo4 = i1Index;
                             }
                         }
+                        int newNo = firstRow.getLastCellNum() - 1;
                         if (StringUtils.isNotBlank(modifyColumnName0) && modifyColumnNo0 == -1) {
-                            firstRow.createCell(firstRow.getLastCellNum() + 1).setCellValue(modifyColumnName0);
-                            modifyColumnNo0 = firstRow.getLastCellNum() + 1;
+                            newNo += 1;
+                            firstRow.createCell(newNo).setCellValue(modifyColumnName0);
+                            modifyColumnNo0 = newNo;
                         }
                         if (StringUtils.isNotBlank(modifyColumnName1) && modifyColumnNo1 == -1) {
-                            firstRow.createCell(firstRow.getLastCellNum() + 1).setCellValue(modifyColumnName1);
-                            modifyColumnNo1 = firstRow.getLastCellNum() + 1;
+                            newNo += 1;
+                            firstRow.createCell(newNo).setCellValue(modifyColumnName1);
+                            modifyColumnNo1 = newNo;
 
                         }
                         if (StringUtils.isNotBlank(modifyColumnName2) && modifyColumnNo2 == -1) {
-                            firstRow.createCell(firstRow.getLastCellNum() + 1).setCellValue(modifyColumnName2);
-                            modifyColumnNo2 = firstRow.getLastCellNum() + 1;
+                            newNo += 1;
+                            firstRow.createCell(newNo).setCellValue(modifyColumnName2);
+                            modifyColumnNo2 = newNo;
                         }
                         if (StringUtils.isNotBlank(modifyColumnName3) && modifyColumnNo3 == -1) {
-                            firstRow.createCell(firstRow.getLastCellNum() + 1).setCellValue(modifyColumnName3);
-                            modifyColumnNo3 = firstRow.getLastCellNum() + 1;
+                            newNo += 1;
+                            firstRow.createCell(newNo).setCellValue(modifyColumnName3);
+                            modifyColumnNo3 = newNo;
                         }
                         if (StringUtils.isNotBlank(modifyColumnName4) && modifyColumnNo4 == -1) {
-                            firstRow.createCell(firstRow.getLastCellNum() + 1).setCellValue(modifyColumnName4);
-                            modifyColumnNo4 = firstRow.getLastCellNum() + 1;
+                            newNo += 1;
+                            firstRow.createCell(newNo).setCellValue(modifyColumnName4);
+                            modifyColumnNo4 = newNo;
                         }
                     }
 
